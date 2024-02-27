@@ -21,6 +21,9 @@ class Connection:
 
     def init_weight(self):
         self.weight = 0
+
+    def get_weight(self):
+        return self.weight
     
     def same_activations(self) -> bool:
         return self.recipient.get_activation() == self.sender.get_activation()

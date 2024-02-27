@@ -22,12 +22,14 @@ class Unit:
         self.input = sum(i.sender.activation * i.weight for i in self.incoming_connections)
         return self.input
 
-    def update_activation(self):
+    def update_activation(self) -> bool:
+        orig = self.activation
+        # print("unit input:", self.input, "unit activation:", orig)
         if self.input > self.threshold:
             self.activation = 1
         else:
             self.activation = 0
-        return self.activation
+        return self.activation != orig
     
     def init_io(self):
         self.input = 0
