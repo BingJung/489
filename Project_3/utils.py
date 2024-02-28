@@ -25,8 +25,8 @@ def get_random_pattern(num: int = 16, prob: float = 0.5):
             ret.append(0)
     return ret
 
-def run_tests(network : HopfieldNet, *args: Sequence):
-    # args format: ptts * runs (5)
+def run_tests(network : HopfieldNet, *args: Sequence, sync: int=1):
+    # tests format: probs * ptts * runs (5) * 16
     tests = [*args]
     times = []
     hamming_disances = []
@@ -40,7 +40,7 @@ def run_tests(network : HopfieldNet, *args: Sequence):
             hamming_l2 = []
             energies_l2 = []
             for run in range(5):
-                time, hamming, energy = network.run_to_settle(tests[prob][init_ptt][run])
+                time, hamming, energy = network.run_to_settle(tests[prob][init_ptt][run], sync)
                 times_l2.append(time)
                 hamming_l2.append(hamming)
                 energies_l2.append(energy)
@@ -58,6 +58,9 @@ def get_mean(s: Sequence):
     for i in s:
         mean_l1 = []
         for j in i:
-            mean_l1.append(sum(j) / len(j))
-        means.append(sum(mean_l1) / len(mean_l1))
+            if not None in j:
+                mean_l1.append(sum(j) / len(j))
+            else: 
+                mean_l1.append(None)
+        means.append(mean_l1)
     return means

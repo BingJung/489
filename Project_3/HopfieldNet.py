@@ -11,6 +11,7 @@ class HopfieldNet:
         self.units = units
         self.conns_dict = conns
         self.size = len(units)
+        self.training_patterns = []
 
     def set_pattern(self, pattern: Sequence):
         pattern_l = len(pattern)
@@ -18,6 +19,7 @@ class HopfieldNet:
         f"length of input pattern should be {self.size} rather than {pattern_l}."
         for i in range(pattern_l):
             self.units[i].set_activation(pattern[i])
+        self.training_patterns.append(pattern)
     
     def train_on_pattern(self, pattern: Sequence):
         self.set_pattern(pattern)
@@ -26,32 +28,37 @@ class HopfieldNet:
                 conn.add_weight(1)
             else:
                 conn.add_weight(-1)
-
-    def run_to_settle(self, pattern: Sequence = None) -> tuple[int, int, list]: # reutrning times of iteration to settling
+        self.training_patterns.append(pattern)
+    
+    def run_to_settle(self, pattern: Sequence=None, n_per_it: int=1) -> tuple[int, int, list]:
         if pattern != None:
             self.set_pattern(pattern)
+            self.update_all_inputs() 
         settled = False
         times = 0
         energies = []
-        while not settled:
+        while not settled: # an iteration begins
+            n = n_per_it
             indices = [i for i in range(self.size)]
             random.shuffle(indices)
             # print("indices:", indices)
             settled = True
-            for i in indices:
+            for i in indices: # this loop ends when n nodes are successfully updated
                 # print("index:", i)
-                self.update_all_inputs()
                 times += 1
                 energies.append(self.get_energy())
                 if self.units[i].update_activation():
                     # print("updated")
                     settled = False
+                    n -= 1
+                if n==0:
                     break
-            if times > 10000:
-                return times
+            self.update_all_inputs()
+            if times > 1234:
+                return (None, None, None)
         self.update_all_inputs()
         hamming_dis = [i!=j for i, j in zip(self.get_pattern(), pattern)].count(True)
-        return (times - 15, hamming_dis, energies[:-15])
+        return (times - 16, hamming_dis, energies[:-15]) 
 
     def get_energy(self):
         energy = 0
@@ -61,6 +68,9 @@ class HopfieldNet:
 
     def get_pattern(self) -> list:
         return [unit.activation for unit in self.units]
+    
+    def get_training_patterns(self) -> list:
+        return self.training_patterns
             
     def update_all_inputs(self):
         for unit in self.units:
@@ -69,5 +79,7 @@ class HopfieldNet:
     def init_weights(self):
         for conn in self.conns_dict.values:
             conn.init_weight()
+        self.training_patterns = []
+
 
     
