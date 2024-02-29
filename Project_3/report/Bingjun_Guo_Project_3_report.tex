@@ -6,14 +6,14 @@
 \author{Bingjun Guo (bingjun3)}
 \begin{document}
 \maketitle
-\section*{Part 1}
+\section*{Part 1 Walsh Functions}
 \subsection*{B.1}
-Recordings on each run are in file Part1.txt.\\
-Mean hamming distance in each condition: [0.0, 2.0, 3.55, 5.0, 5.8, 6.1].\\
+Recordings on each run are in file Part1\_results.txt.\\
+Mean hamming distance in each condition: [0.0, 1.65, 3.75, 4.2, 6.45, 7.95].\\
 Mean time-to-settle in each condition: [0.0, 12.55, 19.75, 23.1, 24.65, 25.3].\\
 The network hasn't failed to settle in each probability condition.
 \subsection*{B.2}
-Detailed energy recordings are also in Part1.txt. A plot of energy changes on each run is provided below, and we can tell from the plot that energy isn't always decreasing. It increases occasionally. Detailed energy recording is provided in file Part1\_energy.txt.
+Detailed energy recordings are in Part1\_energy.txt. A plot of energy changes on each run is provided below, and we can tell from the plot that energy isn't always decreasing. It increases occasionally. Detailed energy recording is provided in file Part1\_energy.txt.
 \begin{figure}[h]
     \centering
     \includegraphics[width=8cm]{Part1energy}
@@ -21,8 +21,8 @@ Detailed energy recordings are also in Part1.txt. A plot of energy changes on ea
 \end{figure}
 \newpage
 
-\section*{Part 2}
-Recordings on each run are in file Part2.txt. Interpretation: It will be harder for the model to settle, that is, both time-to-settle and hamming distances will be larger.\\
+\section*{Part 2 Random Patterns}
+Recordings on each run are in file Part2\_results.txt. Interpretation: It will be harder for the model to settle, that is, both time-to-settle and hamming distances will be larger.\\
 Mean hamming distance in each condition: [1.67, 3.07, 4.53, 5.6, 6.47, 6.73].\\
 Mean time-to-settle in each condition: [12.2, 19.2, 29.33, 29.47, 31.6, 34.6].\\
 The network hasn't failed to settle in each probability condition. Detailed energy recording is in file Part2\_energy.txt.\\
@@ -32,10 +32,27 @@ The network hasn't failed to settle in each probability condition. Detailed ener
     \caption{Energy on each run in part 2}
 \end{figure}\\
 It can be observed that mean hamming distances between and time-to-settle are indeed larger, even though the number of training and testing patterns is less. What's more, when the probability is 0, that is, the starting state is exactly the same as a training pattern, the model can fail to settle. It can because that training patterns are random rather than following walsh functions, hence the learning capacity is reduced.\\
-In the following runs on two extra patterns, mean hamming distances are 6.6, 5.2 and mean time-to-settle are 37.0, 21.0. Meanwhile, when the probability is 0.2, previous mean values are 4.53 and 29.33. It can be told that hamming distances are larger for the latter two patterns, and time-to-settle are occasionally larger. In Further experiments, it can be observed that they are mostly larger in latter two patterns.
+In the following runs on two extra patterns, mean hamming distances are 6.6, 5.2 and mean time-to-settle are 37.0, 21.0. Meanwhile, when the probability is 0.2, previous mean values are 4.53 and 29.33. It can be told that hamming distances are larger for the latter two patterns, and time-to-settle are occasionally larger. In Further experiments, it can be observed that they are mostly larger in last two patterns.
+The reason for this can be due to the limitation of the model learning capacity, as the model is trained on more pattern, it's less likely to remember the training patterns.
 \newpage
 
-\section*{Part 3}
+\section*{Part 3 Systematically Related Patterns}
+Detailed recordings are in Part3\_result.txt and Part3\_energy.txt.\\
+Mean hamming distance for each pattern: [0.167, 0.167, 0.33, 0.167, 0, 0.167].\\
+Mean time-to-settle for each pattern: [2.53, 0.833, 1.0, 3.4, 0.0, 3.1].\\
+Again, it doesn't appear that the network ever fails to settle. Meanwhile, for all runs, they settle to the base pattern.
+It can because that since all the training patterns are related, the network successfully remember the way that they are in common, that is, the prior distribution of them.
+For the corresponding psychological phenonmenon, I'm not majoring in Psychology, and ChatGPT tells me that it's referred as ``pareidolia'' or ``apophenia'', which point to human's tendency to ``perceive patterns where none exist, or to find meaning in random or unrelated data''.
+Energy states are provided below:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=8cm]{Part3energy}
+    \caption{Energy on each run in part 3}
+\end{figure}\\
 
-
+\section*{Part 4 Asynchronous Updating}
+In this part I select walsh functions in part 1 as the training patterns for 5 times, updating 1 (asynchronously), 2, 4, 8, 16 (synchronously) units at most in each iteration.
+It turns out that as the maximum number of units that can be updated in each iteration increases, the chance for the network to fail to settle increases.
+At the same time, the higher the noises are, the higher such chance would be. Energy states are not provided for this part since they are mostly not settling.
+Other recordings are in file Part4\_results.txt. ``None'' means that the network fails to settle within 1234 iterations.
 \end{document}

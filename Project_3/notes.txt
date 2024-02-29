@@ -17,4 +17,4 @@ testing:
 6 related random * 5 runs
 
 Part4
-training:
+As Part1, asynchronously

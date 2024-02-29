@@ -3,7 +3,7 @@ from Unit import Unit
 from HopfieldNet import HopfieldNet
 from itertools import permutations
 import utils
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 ## implement the network
 units = [Unit(0) for _ in range(16)]
@@ -35,23 +35,27 @@ t4 = [[utils.get_flip_pattern(p, .4) for _ in range(runs)] for p in ptts]
 t5 = [[utils.get_flip_pattern(p, .5) for _ in range(runs)] for p in ptts]
 
 ## run tests
-times, hamming_distances, energies = utils.run_tests(network, t0, t1, t2, t3, t4, t5, sync=16)
+# change the "sync" values to control synchronization
+times, hamming_distances, energies = utils.run_tests(network, ptts, t0, t1, t2, t3, t4, t5, sync=16)
 print("Part 4 tests")
 print("times to settle:", times)
 print("hamming distances after settled:", hamming_distances)
 
 ## get means
 mean_times = utils.get_mean(times)
-print("mean times under each probability:", mean_times)
+# for i in range(len(mean_times)):
+#     if None not in mean_times[i]:
+#         mean_times[i] = sum(mean_times[i])
+#     else:
+#         mean_times[i] = None
+print("mean times under each probability for each pattern:", mean_times)
 
 mean_hamming_distances = utils.get_mean(hamming_distances)
-print("mean hamming distances under each probability:", mean_hamming_distances)
+# for i in range(len(mean_hamming_distances)):
+#     if None not in mean_hamming_distances[i]:
+#         mean_hamming_distances[i] = sum(mean_hamming_distances[i])
+#     else: mean_hamming_distances[i] = None
+print("mean hamming distances under each probability for each pattern:", mean_hamming_distances)
 
-# uncomment to print and plot energies
-print(energies)
-
-for i in energies:
-    for j in i:
-        for m in j:
-            plt.plot(m)
-plt.show()
+# # uncomment to print and plot energies
+# print("energy:", energies)

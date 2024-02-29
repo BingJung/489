@@ -30,7 +30,7 @@ class HopfieldNet:
                 conn.add_weight(-1)
         self.training_patterns.append(pattern)
     
-    def run_to_settle(self, pattern: Sequence=None, n_per_it: int=1) -> tuple[int, int, list]:
+    def run_to_settle(self, orig_pattern: Sequence, pattern: Sequence=None, n_per_it: int=1) -> tuple[int, int, list]:
         if pattern != None:
             self.set_pattern(pattern)
             self.update_all_inputs() 
@@ -57,7 +57,7 @@ class HopfieldNet:
             if times > 1234:
                 return (None, None, None)
         self.update_all_inputs()
-        hamming_dis = [i!=j for i, j in zip(self.get_pattern(), pattern)].count(True)
+        hamming_dis = [i!=j for i, j in zip(self.get_pattern(), orig_pattern)].count(True)
         return (times - 16, hamming_dis, energies[:-15]) 
 
     def get_energy(self):

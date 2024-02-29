@@ -46,7 +46,7 @@ t5 = [[utils.get_flip_pattern(p, .5) for _ in range(runs)] for p in ptts]
 # # print(energies, len(energies))
 
 ## run tests
-times, hamming_distances, energies = utils.run_tests(network, t0, t1, t2, t3, t4, t5)
+times, hamming_distances, energies = utils.run_tests(network, ptts, t0, t1, t2, t3, t4, t5)
 print("Part 1 tests")
 print("times to settle:", times)
 print("hamming distances after settled:", hamming_distances)
@@ -60,19 +60,19 @@ print("hamming distances after settled:", hamming_distances)
 #     mean_times.append(sum(mean_l1) / len(mean_l1))
 mean_times = utils.get_mean(times)
 for i in range(len(mean_times)):
-    mean_times[i] = sum(mean_times[i])
+    mean_times[i] = sum(mean_times[i]) / len(mean_times[i])
 print("mean times under each probability:", mean_times)
 
 mean_hamming_distances = utils.get_mean(hamming_distances)
 for i in range(len(mean_hamming_distances)):
-    mean_hamming_distances[i] = sum(mean_hamming_distances[i])
+    mean_hamming_distances[i] = sum(mean_hamming_distances[i]) / len(mean_hamming_distances[i])
 print("mean hamming distances under each probability:", mean_hamming_distances)
 
 ## uncomment to print and plot energy
 # print("energy:", energies)
 
-# for i in energies:
-#     for j in i:
-#         for m in j:
-#             plt.plot(m)
-# plt.show()
+for i in energies:
+    for j in i:
+        for m in j:
+            plt.plot(m)
+plt.show()
