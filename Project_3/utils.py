@@ -59,7 +59,7 @@ def get_mean(s: Sequence):
         mean_l1 = []
         for j in i:
             if not None in j:
-                mean_l1.append(sum(j) / len(j))
+                mean_l1.append(sum(j) / len(j) / len(i))
             else: 
                 mean_l1.append(None)
         means.append(mean_l1)

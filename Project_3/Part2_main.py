@@ -40,10 +40,17 @@ print("hamming distances after settled:", hamming_distances)
 
 ## get means
 mean_times = utils.get_mean(times)
+for i in range(len(mean_times)):
+    mean_times[i] = sum(mean_times[i])
 print("mean times under each probability:", mean_times)
 
 mean_hamming_distances = utils.get_mean(hamming_distances)
+for i in range(len(mean_hamming_distances)):
+    mean_hamming_distances[i] = sum(mean_hamming_distances[i])
 print("mean hamming distances under each probability:", mean_hamming_distances)
+
+## uncomment to print and plot energy
+# print("energy:", energies)
 
 # ## plot energies
 # for i in energies:

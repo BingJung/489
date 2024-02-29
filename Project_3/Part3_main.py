@@ -33,9 +33,11 @@ print("mean times under each probability:", mean_times)
 mean_hamming_distances = utils.get_mean(hamming_distances)
 print("mean hamming distances under each probability:", mean_hamming_distances)
 
-# ## plot energies
-# for i in energies:
-#     for j in i:
-#         for m in j:
-#             plt.plot(m)
-# plt.show()
+# uncomment to print and plot energies
+print(energies)
+
+for i in energies:
+    for j in i:
+        for m in j:
+            plt.plot(m)
+plt.show()

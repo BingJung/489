@@ -3,7 +3,7 @@ from Unit import Unit
 from HopfieldNet import HopfieldNet
 from itertools import permutations
 import utils
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 ## implement the network
 units = [Unit(0) for _ in range(16)]
@@ -52,23 +52,25 @@ print("times to settle:", times)
 print("hamming distances after settled:", hamming_distances)
 
 ## get means
-mean_times = []
-for i in times:
-    mean_l1 = []
-    for j in i:
-        mean_l1.append(sum(j) / len(j))
-    mean_times.append(sum(mean_l1) / len(mean_l1))
+# mean_times = []
+# for i in times:
+#     mean_l1 = []
+#     for j in i:
+#         mean_l1.append(sum(j) / len(j))
+#     mean_times.append(sum(mean_l1) / len(mean_l1))
+mean_times = utils.get_mean(times)
+for i in range(len(mean_times)):
+    mean_times[i] = sum(mean_times[i])
 print("mean times under each probability:", mean_times)
 
-mean_hamming_distances = []
-for i in hamming_distances:
-    mean_l1 = []
-    for j in i:
-        mean_l1.append(sum(j) / len(j))
-    mean_hamming_distances.append(sum(mean_l1) / len(mean_l1))
+mean_hamming_distances = utils.get_mean(hamming_distances)
+for i in range(len(mean_hamming_distances)):
+    mean_hamming_distances[i] = sum(mean_hamming_distances[i])
 print("mean hamming distances under each probability:", mean_hamming_distances)
 
-# ## plot energies
+## uncomment to print and plot energy
+# print("energy:", energies)
+
 # for i in energies:
 #     for j in i:
 #         for m in j:
