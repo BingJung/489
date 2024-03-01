@@ -36,7 +36,8 @@ t5 = [[utils.get_flip_pattern(p, .5) for _ in range(runs)] for p in ptts]
 
 ## run tests
 # change the "sync" values to control synchronization
-times, hamming_distances, energies = utils.run_tests(network, ptts, t0, t1, t2, t3, t4, t5, sync=16)
+sync = 4
+times, hamming_distances, energies = utils.run_tests(network, ptts, t0, t1, t2, t3, t4, t5, sync=sync)
 print("Part 4 tests")
 print("times to settle:", times)
 print("hamming distances after settled:", hamming_distances)
@@ -57,12 +58,18 @@ mean_hamming_distances = utils.get_mean(hamming_distances)
 #     else: mean_hamming_distances[i] = None
 print("mean hamming distances under each probability for each pattern:", mean_hamming_distances)
 
-# uncomment to save energies
-with open("Part4_energy.txt", "w") as file:
-    file.write(str(energies))
+# ## uncomment to save data
+# with open("Part4_energy.txt", "a") as file:
+#     file.write(f"energy states when updating {sync} unit(s) each iteration:\n{str(energies)}\n")
+# with open("Part4_results.txt", "a") as file:
+#     file.write(f"\nupdating {sync} unit(s) each iteration:\n")
+#     file.write(f"times to settle:\n{str(times)}\n")
+#     file.write(f"hamming distances after settled:\n{str(hamming_distances)}\n")
+#     file.write(f"mean times under each probability for each pattern:\n{str(mean_times)}\n")
+#     file.write(f"mean hamming distances under each probability for each pattern:\n{str(mean_times)}\n")
 
-for i in energies:
-    for j in i:
-        for m in j:
-            plt.plot(m)
-plt.show()
+# for i in energies:
+#     for j in i:
+#         for m in j:
+#             plt.plot(m)
+# plt.show()

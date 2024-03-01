@@ -34,7 +34,7 @@ print("mean times for each pattern:", mean_times)
 mean_hamming_distances = utils.get_mean(hamming_distances)
 print("mean hamming distances for each pattern:", mean_hamming_distances)
 
-# # uncomment to print and plot energies
+# # uncomment to print, plot energy and save data
 # print("energy:", energies)
 
 # for i in energies:
@@ -42,3 +42,13 @@ print("mean hamming distances for each pattern:", mean_hamming_distances)
 #         for m in j:
 #             plt.plot(m)
 # plt.show()
+
+# with open("Part3_energy.txt", "w") as file:
+#     file.write(str(energies))
+# with open("Part4_results.txt", "w") as file:
+#     file.write("Part 3 tests\n")
+#     file.write(f"\ntimes to settle:\n{str(times)}\n")
+#     file.write(f"\nhamming distances after settled:\n{str(hamming_distances)}\n")
+#     file.write(f"\nsettled patterns:\n{str(states)}\n")
+#     file.write(f"\nmean times under each probability for each pattern:\n{str(mean_times)}\n")
+#     file.write(f"\nmean hamming distances under each probability for each pattern:\n{str(mean_times)}\n")

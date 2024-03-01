@@ -58,7 +58,7 @@ class HopfieldNet:
                 return (None, None, energies)
         self.update_all_inputs()
         hamming_dis = [i!=j for i, j in zip(self.get_pattern(), orig_pattern)].count(True)
-        return (times - 16, hamming_dis, energies[:-15]) 
+        return (times-1, hamming_dis, energies[:-15]) 
 
     def get_energy(self):
         energy = 0
