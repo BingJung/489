@@ -55,7 +55,7 @@ class HopfieldNet:
                     break
             self.update_all_inputs()
             if times > 1234:
-                return (None, None, None)
+                return (None, None, energies)
         self.update_all_inputs()
         hamming_dis = [i!=j for i, j in zip(self.get_pattern(), orig_pattern)].count(True)
         return (times - 16, hamming_dis, energies[:-15]) 

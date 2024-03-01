@@ -57,5 +57,12 @@ mean_hamming_distances = utils.get_mean(hamming_distances)
 #     else: mean_hamming_distances[i] = None
 print("mean hamming distances under each probability for each pattern:", mean_hamming_distances)
 
-# # uncomment to print and plot energies
-# print("energy:", energies)
+# uncomment to save energies
+with open("Part4_energy.txt", "w") as file:
+    file.write(str(energies))
+
+for i in energies:
+    for j in i:
+        for m in j:
+            plt.plot(m)
+plt.show()
