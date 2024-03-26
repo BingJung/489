@@ -1,11 +1,18 @@
 # requirements: (1 layer + 2 layer) * 3 pattern sets * parameter space (learning rate, momentum)
 # experiment 2: add noise
-
 from BPNet import BPNet
+from Patterns import *
 
-network = BPNet([3, 2], 1, 0.2)
+import matplotlib.pyplot as plt
+from IPython import embed
 
-for _ in range(10):
-    print(network.forward([1, 1, 1]))
-    print(network.train_on_pattern([1, 1, 1], [0, 0]))
-    print(network.test_on_pattern([1, 1, 1], [0, 0]))
+# network = BPNet([10, 4], 5)
+network = BPNet([10, 6, 4], 0.5)
+
+print("epochs:", network.train_until_ok(patterns_1, targets4))
+print(network.Gs)
+
+# embed()
+
+for p in patterns_1:
+    print(network.forward(p))

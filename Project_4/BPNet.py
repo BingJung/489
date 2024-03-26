@@ -1,12 +1,9 @@
 # requirement: customizing learning rate, momentum
-
 from typing import Sequence
 from Connection import Connection
 from Unit import Unit
 
 from itertools import product, pairwise
-
-from IPython import embed
 
 class BPNet:
     def __init__(self, units_nums: Sequence, learning_rate = 0.5, momentum = 0) -> None:
@@ -17,8 +14,7 @@ class BPNet:
         self.unit_nums = units_nums
         self.learning_rate = learning_rate
         self.momentum = momentum
-        self.weight_change = 0
-        self.training_patterns = []
+        self.Gs = [] # global errors; only modified by train_until_settle
 
         # build connections and add to units
         self.connections_forward = [{f"({unit1}, {unit2})" : Connection(self.units[layer][unit1], self.units[layer+1][unit2]) for unit1, unit2 in product(range(units_nums[layer]), range(units_nums[layer+1]))} for layer in range(self.layer_num)]
@@ -30,10 +26,12 @@ class BPNet:
 
     # forward activation
     def forward(self, pattern: Sequence) -> list: 
-        assert len(pattern) == self.unit_nums[0], f"input size is supposed to be {self.unit_nums[0]}"
+        assert len(pattern) == self.unit_nums[0], f"input size is supposed to be {self.unit_nums[0]} rather than {len(pattern)}"
         # set activations in the first layer; inputs are not set
         for i in range(len(pattern)):
             self.units[0][i].set_activation(pattern[i])
+
+        # update the rest layers
         for layer_id, layer in enumerate(self.units):
             if layer_id == 0:
                 continue
@@ -55,52 +53,68 @@ class BPNet:
                 unit.sum_forward_error()
 
     # update weights according to errors
-    def update_weights(self):
+    def update_weight_changes(self, learning_rate):
         for weight_layer in self.connections_forward:
             for conn in weight_layer.values():
-                conn.update_weight(self.learning_rate, self.momentum)
+                conn.update_weight_change(learning_rate)
 
-    # train on pattern once
-    def train_on_pattern(self, pattern: Sequence, target: Sequence) -> list:
-        # train
-        self.forward(pattern)
-        self.backward(target)
-        self.update_weights()
+    def update_weights(self, momentum):
+       for weight_layer in self.connections_forward:
+            for conn in weight_layer.values():
+                conn.update_weight(momentum) 
 
-        # add to self.training_pattern and return output
-        self.training_patterns.append((pattern, target))
-        return self.forward(pattern)
-
-    def test_on_pattern(self, pattern: Sequence, target: Sequence) -> list:
-        self.forward(pattern)
-        return [i == (j > 0.5) for i, j in zip(target, self.get_output())]
+    # test on one pattern
+    def test_on_pattern(self, pattern, target, return_error = False) -> list:
+        # output = self.forward
+        if return_error:
+           return [(i - j)**2 for i, j in zip(target, self.forward(pattern))] 
+        return [i == (j > 0.5) for i, j in zip(target, self.forward(pattern))]
     
-    # train the net work on a set of pattern until it generates the correct output
+    # train the net work on a set of patterns until it generates the correct output for all inputs
+    def train_until_ok(self, patterns: Sequence, targets:Sequence):
+        epoch = 0
+        self.Gs = []
+        while sum([sum(self.test_on_pattern(pattern, target)) for pattern, target in zip(patterns, targets)])\
+        != len(targets) * len(targets[0]) and epoch < 1000:
+            # print("epoch:", epoch)
+            # print("weights:", self.get_weights())
+            # for p in patterns:
+            #     print(self.forward(p))
+            epoch += 1
+            for pattern, target in zip(patterns, targets):
+                self.forward(pattern)
+                self.backward(target)
+                self.update_weight_changes(self.learning_rate)
+                # print("sample weight change:", list(self.connections_forward[-1].values())[-1].get_weight_change())
+            self.update_weights(self.momentum) # this will initialize weight_changes
+            self.Gs.append(self.get_G(patterns, targets))
+        # print("final weights:", self.get_weights())
+        return epoch
 
+    # get global error on a set of patterns
+    def get_G(self, patterns: Sequence, targets: Sequence) -> float:
+        return sum([sum(self.test_on_pattern(pattern, target, True)) / len(target) for pattern, target in zip(patterns, targets)]) / len(targets)
+    
     def set_learning_rate(self, learning_rate):
         self.learning_rate = learning_rate
 
     def set_momentum(self, momentum):
         self.momentum = momentum
-
-    def get_output_error(self, )
-    # get global error
-    def get_G(self, patterns, target) -> float:
-        G = 0
-        for pattern in patterns:
-            pass
-    ### TODO 
-
+    
     def get_output(self) -> list:
         return [unit.get_activation() for unit in self.units[-1]]
+    
+    def get_weights(self) -> list:
+        return [[c.get_weight() for c in layer.values()] for layer in self.connections_forward]
     
     def get_training_patterns(self) -> list:
         return self.training_patterns
 
-    def init_weights(self):
-        for conn in self.conns_dict.values:
-            conn.init_weight()
+    def init(self):
+        for conns in self.connections_forward.values():
+            for c in conns:
+                c.init()
         self.training_patterns = []
+        self.Gs = []
 
 
-    
