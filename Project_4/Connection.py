@@ -23,7 +23,7 @@ class Connection:
         self.weight = weight
     
     # returning the current weight change (not including momentum)
-    def update_weight_change(self, learning_rate = 0.2) -> float:
+    def update_weight_change(self, learning_rate = 0.5) -> float:
         self.weight_change += learning_rate * self.recipient.error * self.sender.activation
         return self.weight_change
 

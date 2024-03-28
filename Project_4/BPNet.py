@@ -25,7 +25,7 @@ class BPNet:
                 self.units[layer2][unit2].add_connection(self.connections_forward[layer1][f"({unit1}, {unit2})"])
 
     # forward activation
-    def forward(self, pattern: Sequence) -> list: 
+    def forward(self, pattern: Sequence, bin = False) -> list: 
         assert len(pattern) == self.unit_nums[0], f"input size is supposed to be {self.unit_nums[0]} rather than {len(pattern)}"
         # set activations in the first layer; inputs are not set
         for i in range(len(pattern)):
@@ -38,7 +38,11 @@ class BPNet:
             for unit in layer:
                 unit.get_input()
                 unit.update_activation()
-        return [unit.get_activation() for unit in self.units[-1]]
+
+        if bin: # return binary outputs
+            return [1 if unit.get_activation() > 0.5 else 0 for unit in self.units[-1]]
+        else:
+            return [unit.get_activation() for unit in self.units[-1]]
 
     # backward error
     def backward(self, target: Sequence):
@@ -71,11 +75,11 @@ class BPNet:
         return [i == (j > 0.5) for i, j in zip(target, self.forward(pattern))]
     
     # train the net work on a set of patterns until it generates the correct output for all inputs
-    def train_until_ok(self, patterns: Sequence, targets:Sequence):
+    def train_until_ok(self, patterns: Sequence, targets: Sequence, hard = False):
         epoch = 0
         self.Gs = []
         while sum([sum(self.test_on_pattern(pattern, target)) for pattern, target in zip(patterns, targets)])\
-        != len(targets) * len(targets[0]) and epoch < 1000:
+        != len(targets) * len(targets[0]) and epoch < 500:
             # print("epoch:", epoch)
             # print("weights:", self.get_weights())
             # for p in patterns:
@@ -88,6 +92,16 @@ class BPNet:
                 # print("sample weight change:", list(self.connections_forward[-1].values())[-1].get_weight_change())
             self.update_weights(self.momentum) # this will initialize weight_changes
             self.Gs.append(self.get_G(patterns, targets))
+        if hard:
+            while epoch < 500:
+                epoch += 1
+                for pattern, target in zip(patterns, targets):
+                    self.forward(pattern)
+                    self.backward(target)
+                    self.update_weight_changes(self.learning_rate)
+                self.update_weights(self.momentum) # this will initialize weight_changes
+                self.Gs.append(self.get_G(patterns, targets))
+
         # print("final weights:", self.get_weights())
         return epoch
 
