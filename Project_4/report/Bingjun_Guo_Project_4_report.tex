@@ -26,7 +26,7 @@ the best learning rate lies around 2, and the best momentum lies between 0 and 0
     \end{minipage}
 \end{figure}
 
-With noises, as is plotted below, the error rate for both nets will increase as the noise level increases. It can be indicated that net2 has stronger generalization capacity.
+Both nets perfectly classifies the original training patterns. With noises, as is plotted below, the error rate for both nets will increase as the noise level increases. It can be indicated that net2 has stronger generalization capacity.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.5\textwidth]{part1set1g.png}
@@ -48,7 +48,7 @@ It seems that net1, which is simpler, fails to classify this set with larger lea
     \end{minipage}
 \end{figure}
 
-With noises, still, the error rate increases as noise level increases for both nets. However, the generalization capacities for both nets seem the same now.
+Still, both nets perfectly classifies the original training patterns. With noises, still, the error rate increases as noise level increases for both nets. However, the generalization capacities for both nets seem the same now.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.5\textwidth]{part1set2g.png}
@@ -70,7 +70,7 @@ Net1 fails to classify this set under any conditions, since single layer nets ca
     \end{minipage}
 \end{figure}
 
-Since net1 fails on classifying this set, but its overall error rate somehow seems the same as that of net2 as noise gets larger. Moreover, the generalization capacity of net2 seems improved for a bit.
+Net1 fails on classifying this set, but its overall error rate somehow seems the same as that of net2 as noise gets larger. Moreover, the generalization capacity of net2 seems improved for a bit.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.5\textwidth]{part1set3g.png}
@@ -84,7 +84,7 @@ Yes. It seems the training is fastest when learning rate is set to 6, which take
 \subsection*{Part 2B}
 The network gives $[0, 0, 0, 0, 0, 0, 0, 0]$. No. The network is still not able to generalize on this dataset, which can due to the limited training data. The network doesn't know the rule yet.
 \subsection*{Part 2C}
-Still with learning rate 6, it takes 6 to 12 epochs this time. The network was tested on patterns $[0, 0, 1, 1, 0, 0, 0, 0]$, $[1, 1, 0, 0, 0, 0, 1, 0]$, and $[0, 0, 1, 0, 0, 0, 0, 0]$, then produced $[0, 1, 0, 0, 0, 0, 0, 0]$, $[1, 1, 1, 0, 0, 0, 0, 0]$, and $[1, 1, 1, 0, 0, 0, 0, 0]$ as outputs. None of them is correct. The network still fails to generalize to untrained patterns, and it still doesn't know the rule. This may be caused by the limited learning capacity of the network.
+Still with learning rate 6, it takes 6 to 12 epochs this time, which is a bit faster. The network was tested on patterns $[0, 0, 1, 1, 0, 0, 0, 0]$, $[1, 1, 0, 0, 0, 0, 1, 0]$, and $[0, 0, 1, 0, 0, 0, 0, 0]$, then produced $[0, 1, 0, 0, 0, 0, 0, 0]$, $[1, 1, 1, 0, 0, 0, 0, 0]$, and $[1, 1, 1, 0, 0, 0, 0, 0]$ as outputs. None of them is correct. The network still fails to generalize to untrained patterns, and it still doesn't know the rule. This may indicate the limited learning capacity of the network.
 \subsection*{Part3, Rules}
-The output is $[0, 0, 0, 0, 0, 0, 0, 0]$ in most cases. The network seems always fail to generalize. The additional training seems not helping. It even forgets the training patterns in Part 2A. 
+The output is $[0, 0, 0, 0, 0, 0, 0, 0]$ in most cases. The network seems always fail to generalize. The additional training seems not helping. It even forgets the training patterns in Part 2A. By the way, I tried adding the additional patterns to the training patterns and training all the 5 patterns at once. The training was still successful, but the network still failed on generalize to all the untrained patterns. I think this can be an issue of initialization. Different initialization has great influence on how the network will be understanding the training patterns. 
 \end{document}
